@@ -8,9 +8,6 @@ const humidity = document.getElementById('humidity');
 const windSpeed = document.getElementById('windSpeed');
 const errorMessage = document.getElementById('error-message');
 
-// API key intentionally excluded from repo for security
-// Replace with your own key when running locally
-const API_KEY = 'YOUR_API_KEY';
 
   
     // 2. Fetch data and store in variable 'response'
