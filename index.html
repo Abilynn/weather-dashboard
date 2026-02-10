@@ -9,6 +9,36 @@
   <script src="js/app.js" defer></script>
 </head>
 <body>
-  
+  <main class="app">
+    
+    <header class="app_header">
+      <h1>Weather Dashboard</h1>
+      <p>Search weather by city</p>
+    </header>
+
+    <section class="search">
+      <input 
+        type="text"
+        id="cityInput"
+        class="city_input"
+        placeholder="Enter city name">
+
+      <button id="getWeatherBtn" class="get_weather_btn">
+        Get Weather
+      </button>
+    </section>
+
+    <p id="error-message" class="error hidden"></p>
+
+    <section class="weather">
+      <div class="weather_card hidden" id="weatherCard">
+        <h2 id="cityNameWeather"></h2>
+        <p class="weather_temp" id="temperature"></p>
+        <p id="humidity"></p>
+        <p id="windSpeed"></p>
+      </div>
+    </section>
+
+  </main>
 </body>
 </html>
