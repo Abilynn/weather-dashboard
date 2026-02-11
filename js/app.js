@@ -40,6 +40,7 @@ const errorMessage = document.getElementById('error-message');
       errorMessage.textContent = message;
       errorMessage.classList.remove('hidden'); // 🔹 SHOW error
       weatherCard.classList.add('hidden');
+      cityInput.focus(); // Keep cursor active for correction
   }
 
   // Set button loading state
@@ -47,9 +48,11 @@ const errorMessage = document.getElementById('error-message');
       if (isLoading) {
         getWeatherBtn.textContent = 'Loading...';
         getWeatherBtn.disabled = true;
+        cityInput.disabled = true; // Disable input while loading
       } else {
         getWeatherBtn.textContent = 'Get Weather';
         getWeatherBtn.disabled = false;
+        cityInput.disabled = false; // Re-enable input when loading is done
       }
     }
   
@@ -67,15 +70,20 @@ const errorMessage = document.getElementById('error-message');
     errorMessage.textContent = '';
     errorMessage.classList.add('hidden'); // 🔹 HIDE error
 
+    weatherCard.classList.add('hidden'); // Hide weather card while loading new data
+
     setLoading(true); // Show loading state
 
     try {
       const data = await getWeatherData(city);
       updateWeatherUI(data);
+
+      cityInput.value = '';        // Clear input
     } catch (error) {
       showError(error.message);
     } finally {
         setLoading(false); // Reset loading state
+        cityInput.focus();           // Keep cursor active for quick correction or new search
     }
   }
 
@@ -85,6 +93,7 @@ const errorMessage = document.getElementById('error-message');
   // Allow pressing Enter key to trigger search
     cityInput.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
+        event.preventDefault();
         handleGetWeather();
       }
     });
