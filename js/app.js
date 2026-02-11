@@ -11,13 +11,13 @@ const errorMessage = document.getElementById('error-message');
 
 
   
-    // Fetch data and store in variable 'response'
+  // Fetch data and store in variable 'response'
     async function getWeatherData(city) {
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
       );
 
-      // Handle invalid city. If the response is not ok, throw an error to be caught in the catch block.
+    // Handle invalid city. If the response is not ok, throw an error to be caught in the catch block.
       if (!response.ok) {
         throw new Error('City not found');
       }
@@ -25,14 +25,14 @@ const errorMessage = document.getElementById('error-message');
       return response.json();
     }
 
-    // Update UI
+  // Update UI
     function updateWeatherUI(data) {
     cityNameWeather.textContent = `City: ${data.name}`;
     temperature.textContent = `Temperature: ${data.main.temp} °C`;
     humidity.textContent = `Humidity: ${data.main.humidity}%`;
     windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
 
-    // Show the weather card
+  // Show the weather card
     weatherCard.classList.remove('hidden');
     }
   
@@ -42,6 +42,7 @@ const errorMessage = document.getElementById('error-message');
       weatherCard.classList.add('hidden');
   }
 
+  // Set button loading state
     function setLoading(isLoading) {
       if (isLoading) {
         getWeatherBtn.textContent = 'Loading...';
@@ -52,9 +53,10 @@ const errorMessage = document.getElementById('error-message');
       }
     }
   
+  // weather search function
 
-    // Add event listener to the button
-    getWeatherBtn.addEventListener('click', async () => {
+  // Add event listener to the button
+    async function handleGetWeather() {
       const city = cityInput.value.trim();
 
       if (city === '') {
@@ -75,4 +77,14 @@ const errorMessage = document.getElementById('error-message');
     } finally {
         setLoading(false); // Reset loading state
     }
-  });
+  }
+
+  // Attach event listener to the button
+    getWeatherBtn.addEventListener('click', handleGetWeather);
+
+  // Allow pressing Enter key to trigger search
+    cityInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        handleGetWeather();
+      }
+    });
