@@ -1,5 +1,6 @@
 
-// Select DOM elements (MATCHES your HTML exactly)
+// Select DOM elements
+const app = document.querySelector('.app');
 const getWeatherBtn = document.getElementById('getWeatherBtn');
 const cityInput = document.getElementById('cityInput');
 const weatherCard = document.getElementById('weatherCard');
@@ -7,6 +8,7 @@ const cityNameWeather = document.getElementById('cityNameWeather');
 const temperature = document.getElementById('temperature');
 const humidity = document.getElementById('humidity');
 const windSpeed = document.getElementById('windSpeed');
+const weatherMain = document.getElementById('weatherMain');
 const errorMessage = document.getElementById('error-message');
 
 
@@ -27,13 +29,42 @@ const errorMessage = document.getElementById('error-message');
 
   // Update UI
     function updateWeatherUI(data) {
-    cityNameWeather.textContent = `City: ${data.name}`;
-    temperature.textContent = `Temperature: ${data.main.temp} °C`;
-    humidity.textContent = `Humidity: ${data.main.humidity}%`;
-    windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
 
-  // Show the weather card
-    weatherCard.classList.remove('hidden');
+      updateBackground(data.weather[0].main);
+      
+      cityNameWeather.textContent = `City: ${data.name}`;
+      temperature.textContent = `Temperature: ${data.main.temp} °C`;
+      humidity.textContent = `Humidity: ${data.main.humidity}%`;
+      windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+      weatherMain.textContent = `Condition: ${data.weather[0].main}`;
+
+    // Show the weather card
+      weatherCard.classList.remove('hidden');
+    }
+
+    function updateBackground(weatherType) {
+      app.classList.remove(
+        'bg-clear',
+        'bg-clouds',
+        'bg-rain',
+        'bg-snow',
+        'bg-default'
+);
+ // reset all background classes
+
+      const type = weatherType.toLowerCase();
+
+      if (type.includes('clear')) {
+        app.classList.add('bg-clear');
+      } else if (type.includes('cloud')) {
+        app.classList.add('bg-clouds');
+      } else if (type.includes('rain') || type.includes('drizzle')) {
+        app.classList.add('bg-rain');
+      } else if (type.includes('snow')) {
+        app.classList.add('bg-snow');
+      } else {
+        app.classList.add('bg-default');
+      }
     }
   
     function showError(message) {
@@ -56,13 +87,17 @@ const errorMessage = document.getElementById('error-message');
       }
     }
   
-  // weather search function
+    function resetBackground() {
+      app.className = 'app';       // remove all weather background classes
+      app.classList.add('bg-default');
+    }
 
   // Add event listener to the button
     async function handleGetWeather() {
       const city = cityInput.value.trim();
 
       if (city === '') {
+        resetBackground();
         showError('Please enter a city name');
         return;
     }
@@ -80,6 +115,7 @@ const errorMessage = document.getElementById('error-message');
 
       cityInput.value = '';        // Clear input
     } catch (error) {
+      resetBackground();
       showError(error.message);
     } finally {
         setLoading(false); // Reset loading state
