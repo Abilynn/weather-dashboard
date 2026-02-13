@@ -1,7 +1,14 @@
 
+// variable to store currrent celsius temperature(toogle feature)
+let currentTempCelsius = null;
+
+let isCelsius = true;
+
+
 // Select DOM elements
 const app = document.querySelector('.app');
 const getWeatherBtn = document.getElementById('getWeatherBtn');
+const unitToggle = document.getElementById('unitToggle');
 const cityInput = document.getElementById('cityInput');
 const weatherCard = document.getElementById('weatherCard');
 const cityNameWeather = document.getElementById('cityNameWeather');
@@ -29,11 +36,13 @@ const errorMessage = document.getElementById('error-message');
 
   // Update UI
     function updateWeatherUI(data) {
-
       updateBackground(data.weather[0].main);
+
+      // Store temperature data
+      currentTempCelsius = data.main.temp;
       
       cityNameWeather.textContent = `City: ${data.name}`;
-      temperature.textContent = `Temperature: ${data.main.temp} °C`;
+      temperature.textContent = `Temperature: ${formatTemperature()}`;
       humidity.textContent = `Humidity: ${data.main.humidity}%`;
       windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
       weatherMain.textContent = `Condition: ${data.weather[0].main}`;
@@ -41,6 +50,18 @@ const errorMessage = document.getElementById('error-message');
     // Show the weather card
       weatherCard.classList.remove('hidden');
     }
+
+    function formatTemperature() {
+      if (currentTempCelsius === null) return '';
+
+      if (isCelsius) {
+        return `${Math.round(currentTempCelsius)} °C`;
+      } else {
+        const fahrenheit = (currentTempCelsius * 9) / 5 + 32;
+        return `${Math.round(fahrenheit)} °F`;
+      }
+    }
+
 
     function updateBackground(weatherType) {
       app.classList.remove(
@@ -58,7 +79,7 @@ const errorMessage = document.getElementById('error-message');
         app.classList.add('bg-clear');
       } else if (type.includes('cloud')) {
         app.classList.add('bg-clouds');
-      } else if (type.includes('rain') || type.includes('drizzle')) {
+      } else if (type.includes('rain') || type.includes('drizzle') || type.includes('mist')) {
         app.classList.add('bg-rain');
       } else if (type.includes('snow')) {
         app.classList.add('bg-snow');
@@ -80,10 +101,12 @@ const errorMessage = document.getElementById('error-message');
         getWeatherBtn.textContent = 'Loading...';
         getWeatherBtn.disabled = true;
         cityInput.disabled = true; // Disable input while loading
+        unitToggle.disabled = isLoading; // Disable toggle button while loading
       } else {
         getWeatherBtn.textContent = 'Get Weather';
         getWeatherBtn.disabled = false;
         cityInput.disabled = false; // Re-enable input when loading is done
+        unitToggle.disabled = false; // Re-enable toggle button when loading is done
       }
     }
   
@@ -132,4 +155,14 @@ const errorMessage = document.getElementById('error-message');
         event.preventDefault();
         handleGetWeather();
       }
+    });
+
+  // Add event listener to toggle button
+    unitToggle.addEventListener('click', () => {
+      if (currentTempCelsius === null) return;
+
+      isCelsius = !isCelsius;
+
+      temperature.textContent = `Temperature: ${formatTemperature()}`;
+      unitToggle.textContent = isCelsius ? '°F' : '°C';
     });
