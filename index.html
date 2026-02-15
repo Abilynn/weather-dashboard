@@ -9,6 +9,8 @@
 
   <script src="js/config.js" defer></script>
   <script src="js/app.js" defer></script>
+
+  <link rel="icon" href="data:,">
 </head>
 <body>
   <main class="app">
@@ -31,14 +33,28 @@
       <button id="unitToggle" class="unit_toggle">
         °F
       </button>
-
     </section>
+
+    <div class="recent_searches">
+      <div class="recent_header">
+        <p class="recent_label">Recent Searches</p>
+        <button id="clearRecentBtn" class="clear_btn">Clear All</button>
+      </div>
+      
+      <div id="recentList" class="recent_list"></div>
+    </div>
+
 
     <p id="error-message" class="error hidden"></p>
 
     <section class="weather">
       <div class="weather_card hidden" id="weatherCard">
         <h2 id="cityNameWeather"></h2>
+        <img
+        id="weatherIcon"
+        class="weather_icon"
+        alt="Weather icon"
+        />
         <p class="weather_temp" id="temperature"></p>
         <p id="humidity"></p>
         <p id="windSpeed"></p>

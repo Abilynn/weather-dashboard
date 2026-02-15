@@ -17,7 +17,32 @@ const humidity = document.getElementById('humidity');
 const windSpeed = document.getElementById('windSpeed');
 const weatherMain = document.getElementById('weatherMain');
 const errorMessage = document.getElementById('error-message');
+const recentList = document.getElementById('recentList');
+const clearRecentBtn = document.getElementById('clearRecentBtn');
+const weatherIcon = document.getElementById('weatherIcon');
 
+
+function getRecentSearches() {
+  const stored = localStorage.getItem('recentCities');
+  return stored ? JSON.parse(stored) : [];
+}
+
+function saveRecentSearch(city) {
+  let cities = getRecentSearches();
+
+  // Remove duplicate if it exists
+  cities = cities.filter(c => c.toLowerCase() !== city.toLowerCase());
+
+  // Add new city to the beginning
+  cities.unshift(city);
+
+  // Keep only last 5
+  if (cities.length > 5) {
+    cities.pop();
+  }
+
+  localStorage.setItem('recentCities', JSON.stringify(cities));
+}
 
   
   // Fetch data and store in variable 'response'
@@ -37,6 +62,10 @@ const errorMessage = document.getElementById('error-message');
   // Update UI
     function updateWeatherUI(data) {
       updateBackground(data.weather[0].main);
+
+      const iconCode = data.weather[0].icon;
+      weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+      weatherIcon.alt = data.weather[0].description;
 
       // Store temperature data
       currentTempCelsius = data.main.temp;
@@ -93,6 +122,8 @@ const errorMessage = document.getElementById('error-message');
       errorMessage.classList.remove('hidden'); // 🔹 SHOW error
       weatherCard.classList.add('hidden');
       cityInput.focus(); // Keep cursor active for correction
+      weatherIcon.src = '';
+      weatherIcon.alt = '';
   }
 
   // Set button loading state
@@ -136,6 +167,9 @@ const errorMessage = document.getElementById('error-message');
       const data = await getWeatherData(city);
       updateWeatherUI(data);
 
+      saveRecentSearch(data.name);
+      renderRecentSearches();
+
       cityInput.value = '';        // Clear input
     } catch (error) {
       resetBackground();
@@ -166,3 +200,35 @@ const errorMessage = document.getElementById('error-message');
       temperature.textContent = `Temperature: ${formatTemperature()}`;
       unitToggle.textContent = isCelsius ? '°F' : '°C';
     });
+
+
+    function renderRecentSearches() {
+      const cities = getRecentSearches();
+
+      clearRecentBtn.style.display = cities.length ? 'inline-block' : 'none';
+
+      recentList.innerHTML = '';
+
+      cities.forEach(city => {
+        const button = document.createElement('button');
+        button.textContent = city;
+        button.className = 'recent_item';
+
+        button.addEventListener('click', () => {
+          cityInput.value = city;
+          handleGetWeather();
+        });
+
+        recentList.appendChild(button);
+      });
+      
+    }
+
+    renderRecentSearches();
+
+    function clearRecentSearches() {
+      localStorage.removeItem('recentCities');
+      renderRecentSearches();
+    }
+
+    clearRecentBtn.addEventListener('click', clearRecentSearches);
