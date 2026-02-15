@@ -126,6 +126,18 @@ function saveRecentSearch(city) {
       weatherIcon.alt = '';
   }
 
+    function showLoadingUI() {
+      weatherCard.classList.remove('hidden');
+      cityNameWeather.textContent = 'Loading...';
+      temperature.textContent = '--';
+      humidity.textContent = '--';
+      windSpeed.textContent = '--';
+      weatherMain.textContent = 'Fetching weather';
+      weatherIcon.src = '';
+      weatherIcon.alt = 'Loading';
+    }
+
+
   // Set button loading state
     function setLoading(isLoading) {
       if (isLoading) {
@@ -159,8 +171,7 @@ function saveRecentSearch(city) {
     errorMessage.textContent = '';
     errorMessage.classList.add('hidden'); // 🔹 HIDE error
 
-    weatherCard.classList.add('hidden'); // Hide weather card while loading new data
-
+    showLoadingUI();
     setLoading(true); // Show loading state
 
     try {
