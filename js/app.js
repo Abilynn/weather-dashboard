@@ -20,7 +20,7 @@ const errorMessage = document.getElementById('error-message');
 const recentList = document.getElementById('recentList');
 const clearRecentBtn = document.getElementById('clearRecentBtn');
 const weatherIcon = document.getElementById('weatherIcon');
-
+const spinner = document.getElementById('spinner');
 
 function getRecentSearches() {
   const stored = localStorage.getItem('recentCities');
@@ -61,6 +61,8 @@ function saveRecentSearch(city) {
 
   // Update UI
     function updateWeatherUI(data) {
+      spinner.classList.add('hidden');
+      
       updateBackground(data.weather[0].main);
 
       const iconCode = data.weather[0].icon;
@@ -141,15 +143,21 @@ function saveRecentSearch(city) {
   // Set button loading state
     function setLoading(isLoading) {
       if (isLoading) {
+        spinner.classList.remove('hidden');
+        weatherCard.classList.remove('hidden');
+
         getWeatherBtn.textContent = 'Loading...';
         getWeatherBtn.disabled = true;
-        cityInput.disabled = true; // Disable input while loading
-        unitToggle.disabled = isLoading; // Disable toggle button while loading
+        cityInput.disabled = true;
+        unitToggle.disabled = true;
+
       } else {
+        spinner.classList.add('hidden');
+
         getWeatherBtn.textContent = 'Get Weather';
         getWeatherBtn.disabled = false;
-        cityInput.disabled = false; // Re-enable input when loading is done
-        unitToggle.disabled = false; // Re-enable toggle button when loading is done
+        cityInput.disabled = false;
+        unitToggle.disabled = false;
       }
     }
   
