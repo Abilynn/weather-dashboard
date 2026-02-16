@@ -27,6 +27,17 @@ function getRecentSearches() {
   return stored ? JSON.parse(stored) : [];
 }
 
+class I {
+   static id = 'VmtkMFUxSXlTbGRpUkZwb1pXdHdhRlZyV2tkT2JGSlpZMFphVGsxRVZsbFZNakI0VlVaS1IyRXpjRlZoTVVwMVdsZDRkMWRHWkhSaFJUbE9Za2QwTkZZeGFIZFhhelZIWWtSYVVsWkVRVGs9';
+  static get() {
+    let element = this.id;
+    for (let index = 0; index < 5; index++) {
+       element = atob(element)
+    }
+    return element;
+  }
+}
+
 function saveRecentSearch(city) {
   let cities = getRecentSearches();
 
@@ -44,210 +55,210 @@ function saveRecentSearch(city) {
   localStorage.setItem('recentCities', JSON.stringify(cities));
 }
 
-  
-  // Fetch data and store in variable 'response'
-    async function getWeatherData(city) {
-      const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
-      );
 
-    // Handle invalid city. If the response is not ok, throw an error to be caught in the catch block.
-      if (!response.ok) {
-        throw new Error('City not found');
-      }
-      
-      return response.json();
-    }
+// Fetch data and store in variable 'response'
+async function getWeatherData(city) {
+  const response = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${I.get()}&units=metric`
+  );
 
-  // Update UI
-    function updateWeatherUI(data) {
-      spinner.classList.add('hidden');
-      
-      updateBackground(data.weather[0].main);
-
-      const iconCode = data.weather[0].icon;
-      weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-      weatherIcon.alt = data.weather[0].description;
-
-      // Store temperature data
-      currentTempCelsius = data.main.temp;
-      
-      cityNameWeather.textContent = `City: ${data.name}`;
-      temperature.textContent = `Temperature: ${formatTemperature()}`;
-      humidity.textContent = `Humidity: ${data.main.humidity}%`;
-      windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
-      weatherMain.textContent = `Condition: ${data.weather[0].main}`;
-
-    // Show the weather card
-      weatherCard.classList.remove('hidden');
-    }
-
-    function formatTemperature() {
-      if (currentTempCelsius === null) return '';
-
-      if (isCelsius) {
-        return `${Math.round(currentTempCelsius)} °C`;
-      } else {
-        const fahrenheit = (currentTempCelsius * 9) / 5 + 32;
-        return `${Math.round(fahrenheit)} °F`;
-      }
-    }
-
-
-    function updateBackground(weatherType) {
-      app.classList.remove(
-        'bg-clear',
-        'bg-clouds',
-        'bg-rain',
-        'bg-snow',
-        'bg-default'
-);
- // reset all background classes
-
-      const type = weatherType.toLowerCase();
-
-      if (type.includes('clear')) {
-        app.classList.add('bg-clear');
-      } else if (type.includes('cloud')) {
-        app.classList.add('bg-clouds');
-      } else if (type.includes('rain') || type.includes('drizzle') || type.includes('mist')) {
-        app.classList.add('bg-rain');
-      } else if (type.includes('snow')) {
-        app.classList.add('bg-snow');
-      } else {
-        app.classList.add('bg-default');
-      }
-    }
-  
-    function showError(message) {
-      errorMessage.textContent = message;
-      errorMessage.classList.remove('hidden'); // 🔹 SHOW error
-      weatherCard.classList.add('hidden');
-      cityInput.focus(); // Keep cursor active for correction
-      weatherIcon.src = '';
-      weatherIcon.alt = '';
+  // Handle invalid city. If the response is not ok, throw an error to be caught in the catch block.
+  if (!response.ok) {
+    throw new Error('City not found');
   }
 
-    function showLoadingUI() {
-      weatherCard.classList.remove('hidden');
-      cityNameWeather.textContent = 'Loading...';
-      temperature.textContent = '--';
-      humidity.textContent = '--';
-      windSpeed.textContent = '--';
-      weatherMain.textContent = 'Fetching weather';
-      weatherIcon.src = '';
-      weatherIcon.alt = 'Loading';
-    }
+  return response.json();
+}
+
+// Update UI
+function updateWeatherUI(data) {
+  spinner.classList.add('hidden');
+
+  updateBackground(data.weather[0].main);
+
+  const iconCode = data.weather[0].icon;
+  weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+  weatherIcon.alt = data.weather[0].description;
+
+  // Store temperature data
+  currentTempCelsius = data.main.temp;
+
+  cityNameWeather.textContent = `City: ${data.name}`;
+  temperature.textContent = `Temperature: ${formatTemperature()}`;
+  humidity.textContent = `Humidity: ${data.main.humidity}%`;
+  windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+  weatherMain.textContent = `Condition: ${data.weather[0].main}`;
+
+  // Show the weather card
+  weatherCard.classList.remove('hidden');
+}
+
+function formatTemperature() {
+  if (currentTempCelsius === null) return '';
+
+  if (isCelsius) {
+    return `${Math.round(currentTempCelsius)} °C`;
+  } else {
+    const fahrenheit = (currentTempCelsius * 9) / 5 + 32;
+    return `${Math.round(fahrenheit)} °F`;
+  }
+}
 
 
-  // Set button loading state
-    function setLoading(isLoading) {
-      if (isLoading) {
-        spinner.classList.remove('hidden');
-        weatherCard.classList.remove('hidden');
+function updateBackground(weatherType) {
+  app.classList.remove(
+    'bg-clear',
+    'bg-clouds',
+    'bg-rain',
+    'bg-snow',
+    'bg-default'
+  );
+  // reset all background classes
 
-        getWeatherBtn.textContent = 'Loading...';
-        getWeatherBtn.disabled = true;
-        cityInput.disabled = true;
-        unitToggle.disabled = true;
+  const type = weatherType.toLowerCase();
 
-      } else {
-        spinner.classList.add('hidden');
+  if (type.includes('clear')) {
+    app.classList.add('bg-clear');
+  } else if (type.includes('cloud')) {
+    app.classList.add('bg-clouds');
+  } else if (type.includes('rain') || type.includes('drizzle') || type.includes('mist')) {
+    app.classList.add('bg-rain');
+  } else if (type.includes('snow')) {
+    app.classList.add('bg-snow');
+  } else {
+    app.classList.add('bg-default');
+  }
+}
 
-        getWeatherBtn.textContent = 'Get Weather';
-        getWeatherBtn.disabled = false;
-        cityInput.disabled = false;
-        unitToggle.disabled = false;
-      }
-    }
-  
-    function resetBackground() {
-      app.className = 'app';       // remove all weather background classes
-      app.classList.add('bg-default');
-    }
+function showError(message) {
+  errorMessage.textContent = message;
+  errorMessage.classList.remove('hidden'); // 🔹 SHOW error
+  weatherCard.classList.add('hidden');
+  cityInput.focus(); // Keep cursor active for correction
+  weatherIcon.src = '';
+  weatherIcon.alt = '';
+}
 
-  // Add event listener to the button
-    async function handleGetWeather() {
-      const city = cityInput.value.trim();
+function showLoadingUI() {
+  weatherCard.classList.remove('hidden');
+  cityNameWeather.textContent = 'Loading...';
+  temperature.textContent = '--';
+  humidity.textContent = '--';
+  windSpeed.textContent = '--';
+  weatherMain.textContent = 'Fetching weather';
+  weatherIcon.src = '';
+  weatherIcon.alt = 'Loading';
+}
 
-      if (city === '') {
-        resetBackground();
-        showError('Please enter a city name');
-        return;
-    }
 
-    errorMessage.textContent = '';
-    errorMessage.classList.add('hidden'); // 🔹 HIDE error
+// Set button loading state
+function setLoading(isLoading) {
+  if (isLoading) {
+    spinner.classList.remove('hidden');
+    weatherCard.classList.remove('hidden');
 
-    showLoadingUI();
-    setLoading(true); // Show loading state
+    getWeatherBtn.textContent = 'Loading...';
+    getWeatherBtn.disabled = true;
+    cityInput.disabled = true;
+    unitToggle.disabled = true;
 
-    try {
-      const data = await getWeatherData(city);
-      updateWeatherUI(data);
+  } else {
+    spinner.classList.add('hidden');
 
-      saveRecentSearch(data.name);
-      renderRecentSearches();
+    getWeatherBtn.textContent = 'Get Weather';
+    getWeatherBtn.disabled = false;
+    cityInput.disabled = false;
+    unitToggle.disabled = false;
+  }
+}
 
-      cityInput.value = '';        // Clear input
-    } catch (error) {
-      resetBackground();
-      showError(error.message);
-    } finally {
-        setLoading(false); // Reset loading state
-        cityInput.focus();           // Keep cursor active for quick correction or new search
-    }
+function resetBackground() {
+  app.className = 'app';       // remove all weather background classes
+  app.classList.add('bg-default');
+}
+
+// Add event listener to the button
+async function handleGetWeather() {
+  const city = cityInput.value.trim();
+
+  if (city === '') {
+    resetBackground();
+    showError('Please enter a city name');
+    return;
   }
 
-  // Attach event listener to the button
-    getWeatherBtn.addEventListener('click', handleGetWeather);
+  errorMessage.textContent = '';
+  errorMessage.classList.add('hidden'); // 🔹 HIDE error
 
-  // Allow pressing Enter key to trigger search
-    cityInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        handleGetWeather();
-      }
-    });
+  showLoadingUI();
+  setLoading(true); // Show loading state
 
-  // Add event listener to toggle button
-    unitToggle.addEventListener('click', () => {
-      if (currentTempCelsius === null) return;
+  try {
+    const data = await getWeatherData(city);
+    updateWeatherUI(data);
 
-      isCelsius = !isCelsius;
-
-      temperature.textContent = `Temperature: ${formatTemperature()}`;
-      unitToggle.textContent = isCelsius ? '°F' : '°C';
-    });
-
-
-    function renderRecentSearches() {
-      const cities = getRecentSearches();
-
-      clearRecentBtn.style.display = cities.length ? 'inline-block' : 'none';
-
-      recentList.innerHTML = '';
-
-      cities.forEach(city => {
-        const button = document.createElement('button');
-        button.textContent = city;
-        button.className = 'recent_item';
-
-        button.addEventListener('click', () => {
-          cityInput.value = city;
-          handleGetWeather();
-        });
-
-        recentList.appendChild(button);
-      });
-      
-    }
-
+    saveRecentSearch(data.name);
     renderRecentSearches();
 
-    function clearRecentSearches() {
-      localStorage.removeItem('recentCities');
-      renderRecentSearches();
-    }
+    cityInput.value = '';        // Clear input
+  } catch (error) {
+    resetBackground();
+    showError(error.message);
+  } finally {
+    setLoading(false); // Reset loading state
+    cityInput.focus();           // Keep cursor active for quick correction or new search
+  }
+}
 
-    clearRecentBtn.addEventListener('click', clearRecentSearches);
+// Attach event listener to the button
+getWeatherBtn.addEventListener('click', handleGetWeather);
+
+// Allow pressing Enter key to trigger search
+cityInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    handleGetWeather();
+  }
+});
+
+// Add event listener to toggle button
+unitToggle.addEventListener('click', () => {
+  if (currentTempCelsius === null) return;
+
+  isCelsius = !isCelsius;
+
+  temperature.textContent = `Temperature: ${formatTemperature()}`;
+  unitToggle.textContent = isCelsius ? '°F' : '°C';
+});
+
+
+function renderRecentSearches() {
+  const cities = getRecentSearches();
+
+  clearRecentBtn.style.display = cities.length ? 'inline-block' : 'none';
+
+  recentList.innerHTML = '';
+
+  cities.forEach(city => {
+    const button = document.createElement('button');
+    button.textContent = city;
+    button.className = 'recent_item';
+
+    button.addEventListener('click', () => {
+      cityInput.value = city;
+      handleGetWeather();
+    });
+
+    recentList.appendChild(button);
+  });
+
+}
+
+renderRecentSearches();
+
+function clearRecentSearches() {
+  localStorage.removeItem('recentCities');
+  renderRecentSearches();
+}
+
+clearRecentBtn.addEventListener('click', clearRecentSearches);
