@@ -6,7 +6,7 @@ let isCelsius = true;
 
 
 // Select DOM elements
-const app = document.querySelector('.app');
+const app_container = document.querySelector('.app_container');
 const getWeatherBtn = document.getElementById('getWeatherBtn');
 const unitToggle = document.getElementById('unitToggle');
 const cityInput = document.getElementById('cityInput');
@@ -106,7 +106,7 @@ function formatTemperature() {
 
 
 function updateBackground(weatherType) {
-  app.classList.remove(
+  app_container.classList.remove(
     'bg-clear',
     'bg-clouds',
     'bg-rain',
@@ -118,15 +118,15 @@ function updateBackground(weatherType) {
   const type = weatherType.toLowerCase();
 
   if (type.includes('clear')) {
-    app.classList.add('bg-clear');
+    app_container.classList.add('bg-clear');
   } else if (type.includes('cloud')) {
-    app.classList.add('bg-clouds');
+    app_container.classList.add('bg-clouds');
   } else if (type.includes('rain') || type.includes('drizzle') || type.includes('mist')) {
-    app.classList.add('bg-rain');
+    app_container.classList.add('bg-rain');
   } else if (type.includes('snow')) {
-    app.classList.add('bg-snow');
+    app_container.classList.add('bg-snow');
   } else {
-    app.classList.add('bg-default');
+    app_container.classList.add('bg-default');
   }
 }
 
@@ -173,8 +173,8 @@ function setLoading(isLoading) {
 }
 
 function resetBackground() {
-  app.className = 'app';       // remove all weather background classes
-  app.classList.add('bg-default');
+  app_container.className = 'app_container';       // remove all weather background classes
+  app_container.classList.add('bg-default');
 }
 
 // Add event listener to the button
