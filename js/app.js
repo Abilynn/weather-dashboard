@@ -21,6 +21,7 @@ const recentList = document.getElementById('recentList');
 const clearRecentBtn = document.getElementById('clearRecentBtn');
 const weatherIcon = document.getElementById('weatherIcon');
 const spinner = document.getElementById('spinner');
+const themeToggle = document.getElementById("themeToggle");
 
 function getRecentSearches() {
   const stored = localStorage.getItem('recentCities');
@@ -70,6 +71,24 @@ async function getWeatherData(city) {
   return response.json();
 }
 
+// Load saved theme
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "light") {
+  document.body.classList.add("light");
+  themeToggle.textContent = "🌙";
+} else {
+  themeToggle.textContent = "☀️";
+}
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+
+  const isLight = document.body.classList.contains("light");
+  localStorage.setItem("theme", isLight ? "light" : "dark");
+
+  themeToggle.textContent = isLight ? "🌙" : "☀️";
+});
+
 // Update UI
 function updateWeatherUI(data) {
   spinner.classList.add('hidden');
@@ -111,6 +130,7 @@ function updateBackground(weatherType) {
     'bg-clouds',
     'bg-rain',
     'bg-snow',
+    'bg-fog',
     'bg-default'
   );
   // reset all background classes
@@ -125,6 +145,8 @@ function updateBackground(weatherType) {
     app_container.classList.add('bg-rain');
   } else if (type.includes('snow')) {
     app_container.classList.add('bg-snow');
+  } else if (type.includes('fog') || type.includes('haze') || type.includes('smoke')) {
+    app_container.classList.add('bg-fog');
   } else {
     app_container.classList.add('bg-default');
   }
@@ -262,3 +284,5 @@ function clearRecentSearches() {
 }
 
 clearRecentBtn.addEventListener('click', clearRecentSearches);
+
+resetBackground();
