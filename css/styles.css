@@ -10,7 +10,7 @@
 }
 
 body.light {
-  --bg-page: #f1f5f9;
+  --bg-page: #e4eef8;
   --bg-card: #ffffff;
   --bg-soft: #f8fafc;
 
@@ -29,7 +29,7 @@ body:not(.light) .bg-default {
 
 /* Light mode default */
 body.light .bg-default {
-  background: linear-gradient(135deg,  #f8fafd, #cfecff);
+  background: linear-gradient(135deg,  #f8fafd, #c2e5fd);
 }
 
 /* Light mode clear background with subtle overlay for better text contrast */
