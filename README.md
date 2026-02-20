@@ -6,9 +6,9 @@ This is my first frontend project and foundation piece for my developer portfoli
 
 
 ## Live Demo
-Live Site: 
+Live Site: https://weatherdashboardcodelynn.vercel.app/
 
-Repository:(https://github.com/Abilynn/weather-dashboard.git)
+Repository: https://github.com/Abilynn/weather-dashboard.git
 
 
 ## Preview
@@ -159,3 +159,4 @@ Smooth background transitions
 Unit preference persistence
 
 Accessibility improvements (ARIA, contrast refinement)
+
